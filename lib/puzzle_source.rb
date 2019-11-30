@@ -40,6 +40,7 @@ class PuzzleSource
 
     <<~TPL
       module Year#{year}
+        # Solutions for day #{day} of year #{year}
         class Day#{day}
           def part1(input)
             "expected_result"

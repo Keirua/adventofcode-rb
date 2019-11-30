@@ -33,6 +33,8 @@ downloads the input, creates a sample source and spec file'
     PuzzleSource.run_part('part 1') { puzzle.part1(input) }
     puts
     PuzzleSource.run_part('part 2') { puzzle.part2(input) }
+
+    puts "https://adventofcode.com/#{year}/day/#{day}"
   end
 
   desc 'part1 YEAR DAY', 'executes the part1 for a given day/year'
@@ -41,6 +43,7 @@ downloads the input, creates a sample source and spec file'
     puzzle = PuzzleSource.create_puzzle(year, day)
     input = PuzzleInput.load(year, day)
     PuzzleSource.run_part('part 1') { puzzle.part1(input) }
+    puts "https://adventofcode.com/#{year}/day/#{day}"
   end
 
   desc 'part2 YEAR DAY', 'executes the part2 for a given day/year'
@@ -49,6 +52,7 @@ downloads the input, creates a sample source and spec file'
     puzzle = PuzzleSource.create_puzzle(year, day)
     input = PuzzleInput.load(year, day)
     PuzzleSource.run_part('part 2') { puzzle.part2(input) }
+    puts "https://adventofcode.com/#{year}/day/#{day}"
   end
 end
 

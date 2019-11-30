@@ -32,8 +32,9 @@ class PuzzleInput
   def self.skip_if_exists(file)
     if !File.exist? file
       yield
+      puts "✓ created #{file}"
     else
-      puts "#{file} already exists, skipping"
+      puts "✗ #{file} already exists, skipping"
     end
   end
 end

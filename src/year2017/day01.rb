@@ -1,4 +1,5 @@
 module Year2017
+  # Solutions for day 1
   class Day01
     def part1_v2(input)
       numbers = input.strip.split('').map(&:to_i)

@@ -8,20 +8,20 @@ module Year2019
     end
 
     def step
+      a = @program[@program[@ip + 1]]
+      b = @program[@program[@ip + 2]]
       case @program[@ip]
       when 1
-        @program[@program[@ip+3]] = @program[@program[@ip+1]] + @program[@program[@ip+2]]
+        @program[@program[@ip + 3]] = a + b
       when 2
-        @program[@program[@ip+3]] = @program[@program[@ip+1]] * @program[@program[@ip+2]]
+        @program[@program[@ip + 3]] = a * b
       end
       @ip += 4
     end
 
     def run_program
       @ip = 0
-      while @program[@ip] != 99
-        step
-      end
+      step while @program[@ip] != 99
     end
 
     def part1(input)
@@ -33,14 +33,14 @@ module Year2019
     end
 
     def part2(input)
-      for noun in 1..100
-        for verb in 1..100
+      (1..100).each do |noun|
+        (1..100).each do |verb|
           @program = input.split(',').map(&:to_i)
           @program[1] = noun
           @program[2] = verb
           run_program
 
-          return 100 * noun + verb if @program[0] == 19690720
+          return 100 * noun + verb if @program[0] == 19_690_720
         end
       end
     end

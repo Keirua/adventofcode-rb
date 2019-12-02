@@ -33,7 +33,16 @@ module Year2019
     end
 
     def part2(input)
-      nil
+      for noun in 1..100
+        for verb in 1..100
+          @program = input.split(',').map(&:to_i)
+          @program[1] = noun
+          @program[2] = verb
+          run_program
+
+          return 100 * noun + verb if @program[0] == 19690720
+        end
+      end
     end
   end
 end

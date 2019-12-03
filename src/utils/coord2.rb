@@ -5,7 +5,7 @@ class Coord2
     @y = y
   end
 
-  def manhattan()
+  def manhattan
     (@x < 0 ? -@x : @x) + (@y < 0 ? -@y : @y)
   end
 

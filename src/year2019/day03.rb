@@ -32,24 +32,15 @@ module Year2019
     # https://www.youtube.com/watch?v=UeN0i6l_nYU
     def intersection_point(a1, a2, b1, b2)
       ip = nil
-      bounds_x = [
-        min(a1.x, a2.x),
-        max(a1.x, a2.x)
-      ]
-      bounds_y = [
-        min(a1.y, a2.y),
-        max(a1.y, a2.y)
-      ]
+      bounds_x = bounds(a1.x, a2.x)
+      bounds_y = bounds(a1.y, a2.y)
       # first line is horizontal
       if a1.y == a2.y
         # second line is vertical -> there can be an intersection
         if b2.x == b1.x
           ip = Coord2.new(b1.x, a1.y)
           # Then we check if the point actually intersects
-          bounds_b = [
-            min(b1.y, b2.y),
-            max(b1.y, b2.y)
-          ]
+          bounds_b = bounds(b1.y, b2.y)
 
           return nil if b1.x < bounds_x[0] || b1.x > bounds_x[1]
           return nil if bounds_b[0] > bounds_y[0] || bounds_b[1] < bounds_y[1]
@@ -60,10 +51,7 @@ module Year2019
         if b2.y == b1.y
           ip = Coord2.new(a1.x, b1.y)
           # Then we check if the point actually intersects
-          bounds_b = [
-            min(b1.x, b2.x),
-            max(b1.x, b2.x)
-          ]
+          bounds_b = bounds(b1.x, b2.x)
           return nil if b1.y < bounds_y[0] || b1.y > bounds_y[1]
           return nil if bounds_b[0] > bounds_x[0] || bounds_b[1] < bounds_x[1]
         end
@@ -98,9 +86,7 @@ module Year2019
     def part1(input)
       movements1 = line_to_movements(input.lines[0])
       movements2 = line_to_movements(input.lines[1])
-      w1 = movements_to_coords(movements1)
-      w2 = movements_to_coords(movements2)
-      intersections = find_intersections(w1, w2)
+      intersections = intersections_from_movements(movements1, movements2)
       max = 10_000_000
       intersections.each do |i|
         max = i.manhattan if i.manhattan < max && i.manhattan != 0
@@ -111,35 +97,20 @@ module Year2019
     def nb_steps(ip, movements)
       steps = 0
       pos = Coord2.new
+      lut = {
+        'U' => Coord2.new(0, 1),
+        'D' => Coord2.new(0, -1),
+        'L' => Coord2.new(-1, 0),
+        'R' => Coord2.new(1, 0)
+      }
       movements.each do |m|
         i = 0
-        case m.direction
-        when 'D'
-          while !pos.equal?(ip) && i < m.distance
-            i += 1
-            steps += 1
-            pos.y -= 1
-          end
-        when 'U'
-          while !pos.equal?(ip) && i < m.distance
-            i += 1
-            steps += 1
-            pos.y += 1
-          end
-        when 'R'
-          while !pos.equal?(ip) && i < m.distance
-            i += 1
-            steps += 1
-            pos.x += 1
-          end
-        when 'L'
-          while !pos.equal?(ip) && i < m.distance
-            i += 1
-            steps += 1
-            pos.x -= 1
-          end
-        else
-          puts 'not supposed to happen'
+
+        while !pos.equal?(ip) && i < m.distance
+          i += 1
+          steps += 1
+          pos.x += lut[m.direction].x
+          pos.y += lut[m.direction].y
         end
         break if pos.equal?(ip)
       end
@@ -149,19 +120,29 @@ module Year2019
     def part2(input)
       movements1 = line_to_movements(input.lines[0])
       movements2 = line_to_movements(input.lines[1])
-      w1 = movements_to_coords(movements1)
-      w2 = movements_to_coords(movements2)
-      intersections = find_intersections(w1, w2)
+      intersections = intersections_from_movements(movements1, movements2)
       best_sum_of_steps = nil
 
       intersections.each do |i|
         sum_of_steps = nb_steps(i, movements1) + nb_steps(i, movements2)
         if best_sum_of_steps.nil? || sum_of_steps < best_sum_of_steps
-          best_sum_of_steps = sum_of_steps
+          best_sum_of_steps = sum_of_steps if sum_of_steps.positive?
         end
       end
 
       best_sum_of_steps
+    end
+
+    private
+
+    def bounds(a1, a2)
+      [a1, a2].minmax
+    end
+
+    def intersections_from_movements(movements1, movements2)
+      w1 = movements_to_coords(movements1)
+      w2 = movements_to_coords(movements2)
+      find_intersections(w1, w2)
     end
   end
 end

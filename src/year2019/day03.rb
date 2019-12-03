@@ -31,7 +31,6 @@ module Year2019
     # took me a while to figure out, a drawing and a video helped
     # https://www.youtube.com/watch?v=UeN0i6l_nYU
     def intersection_point(a1, a2, b1, b2)
-      # puts a1, a2, b1, b2
       ip = nil
       bounds_x = [
           min(a1.x, a2.x),
@@ -101,8 +100,8 @@ module Year2019
       movements2 = line_to_movements(input.lines[1])
       w1 = movements_to_coords(movements1)
       w2 = movements_to_coords(movements2)
-      max = 10000000
       intersections = find_intersections(w1, w2)
+      max = 10000000
       intersections.each do |i|
         if i.manhattan < max && i.manhattan != 0
           max = i.manhattan
@@ -111,8 +110,60 @@ module Year2019
       max
     end
 
+    def nb_steps(ip, movements)
+      steps = 0
+      pos = Coord2.new
+      movements.each do |m|
+        i = 0
+        case m.direction
+        when 'D'
+          while !pos.equal?(ip) && i < m.distance do
+            i += 1
+            steps += 1
+            pos.y -= 1
+          end
+        when 'U'
+          while !pos.equal?(ip) && i < m.distance do
+            i += 1
+            steps += 1
+            pos.y += 1
+          end
+        when 'R'
+          while !pos.equal?(ip) && i < m.distance do
+            i += 1
+            steps += 1
+            pos.x += 1
+          end
+        when 'L'
+          while !pos.equal?(ip) && i < m.distance do
+            i += 1
+            steps += 1
+            pos.x -= 1
+          end
+        else
+          puts 'not supposed to happen'
+        end
+        break if pos.equal?(ip)
+      end
+      steps
+    end
+
     def part2(input)
-      nil
+      movements1 = line_to_movements(input.lines[0])
+      movements2 = line_to_movements(input.lines[1])
+      w1 = movements_to_coords(movements1)
+      w2 = movements_to_coords(movements2)
+      intersections = find_intersections(w1, w2)
+      best_sum_of_steps = nil
+
+      intersections.each do |i|
+        sum_of_steps = nb_steps(i, movements1) + nb_steps(i, movements2)
+        if best_sum_of_steps.nil? || sum_of_steps < best_sum_of_steps
+          best_sum_of_steps = sum_of_steps
+        end
+      end
+
+      best_sum_of_steps
     end
   end
 end

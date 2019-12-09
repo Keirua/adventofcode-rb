@@ -68,13 +68,13 @@ class IntCodeProgram
       @out << @program[a]
       @ip += 2
     when 5
-      cond = read_param(mode_first, @ip + 1)
-      adress = read_param(mode_second, @ip + 2)
-      @ip = ((cond != 0) ? adress : (@ip + 4))
+      cond = @program[read_param(mode_first, @ip + 1)]
+      adress = @program[read_param(mode_second, @ip + 2)]
+      @ip = ((cond != 0) ? adress : (@ip + 3))
     when 6
-      cond = read_param(mode_first, @ip + 1)
-      adress = read_param(mode_second, @ip + 2)
-      @ip = !cond ? adress : @ip + 4
+      cond = @program[read_param(mode_first, @ip + 1)]
+      adress = @program[read_param(mode_second, @ip + 2)]
+      @ip = ((cond == 0) ? adress : (@ip + 3))
     when 7
       a = read_param(mode_first, @ip + 1)
       b = read_param(mode_second, @ip + 2)

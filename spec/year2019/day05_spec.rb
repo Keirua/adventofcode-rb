@@ -4,7 +4,9 @@ RSpec.describe Year2019::Day05 do
   day = Year2019::Day05.new
 
   it "solves part1" do
-    expect(day.part1('some_input')).to eq('expected_result')
+    ic = IntCodeProgram.new([1002,4,3,4,33])
+    ic.step
+    expect(ic.program).to eq([1002, 4, 3, 4, 99])
   end
 
   it "solves part2" do

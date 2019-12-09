@@ -1,16 +1,14 @@
 require 'spec_helper'
 
-RSpec.describe Year2019::Day02 do
-  day = Year2019::Day02.new
-
+RSpec.describe IntCodeProgram do
   it 'can apply the add operation' do
-    day = Year2019::Day02.new([1, 5, 6, 0, 99, 7, 9])
+    day = IntCodeProgram.new([1, 5, 6, 0, 99, 7, 9])
     day.step
     expect(day.program).to eq([16, 5, 6, 0, 99, 7, 9])
   end
 
   it 'can apply the mul operation' do
-    day = Year2019::Day02.new([2, 5, 6, 0, 99, 7, 9])
+    day = IntCodeProgram.new([2, 5, 6, 0, 99, 7, 9])
     day.step
     expect(day.program).to eq([63, 5, 6, 0, 99, 7, 9])
   end
@@ -23,7 +21,7 @@ RSpec.describe Year2019::Day02 do
       [[1, 1, 1, 4, 99, 5, 6, 0, 99], [30, 1, 1, 4, 2, 5, 6, 0, 99]]
     ]
     samples.each do |initial_program, final_program|
-      day = Year2019::Day02.new(initial_program)
+      day = IntCodeProgram.new(initial_program)
       day.run_program
       expect(day.program).to eq(final_program)
     end

@@ -14,10 +14,11 @@ class IntCodeProgram
     self.new(input.split(',').map(&:to_i))
   end
 
-  def initialize(program = [])
+  def initialize(program = [], iv=1)
     @ip = 0
     @program = program
     @out = []
+    @input = iv
   end
 
   def decode_instruction(instruction)
@@ -38,7 +39,10 @@ class IntCodeProgram
     else
       raise 'should not happen'
     end
+  end
 
+  def set_input(iv)
+    @input = iv
   end
 
   def step
@@ -57,12 +61,34 @@ class IntCodeProgram
       @ip += 4
     when INPUT
       a = read_param(mode_first, @ip + 1)
-      @program[a] = 1
+      @program[a] = @input
       @ip += 2
     when OUTPUT
       a = read_param(mode_first, @ip + 1)
       @out << @program[a]
       @ip += 2
+    when 5
+      cond = read_param(mode_first, @ip + 1)
+      adress = read_param(mode_second, @ip + 2)
+      @ip = ((cond != 0) ? adress : (@ip + 4))
+    when 6
+      cond = read_param(mode_first, @ip + 1)
+      adress = read_param(mode_second, @ip + 2)
+      @ip = !cond ? adress : @ip + 4
+    when 7
+      a = read_param(mode_first, @ip + 1)
+      b = read_param(mode_second, @ip + 2)
+      adress = read_param(mode_third, @ip + 3)
+      @program[adress] = (@program[a] < @program[b] ? 1 : 0)
+      @ip += 4
+    when 8
+      a = read_param(mode_first, @ip + 1)
+      b = read_param(mode_second, @ip + 2)
+      adress = read_param(mode_third, @ip + 3)
+      @program[adress] = (@program[a] == @program[b] ? 1 : 0)
+      @ip += 4
+    else
+      raise 'should not happen'
     end
   end
 

@@ -17,7 +17,7 @@ module Year2019
     def part1(input)
       pairs = parse_pairs(input)
       parents = {}
-      pairs.each { |p,c| parents[c] = p }
+      pairs.each { |p, c| parents[c] = p }
       parents.keys.sum do |k|
         find_nb_orbits(parents, k)
       end
@@ -38,28 +38,39 @@ module Year2019
       neighbours
     end
 
-    def part2(input)
-      input = <<-BEGI
-COM)B
-B)C
-C)D
-D)E
-E)F
-B)G
-G)H
-D)I
-E)J
-J)K
-K)L
-K)YOU
-I)SAN
-      BEGI
+    # https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm#Using_a_priority_queue
+    def dijkstra(neighbours, start_node);
+      unvisited = neighbours.keys
+      distances = {}
+      prev = {}
+      neighbours.keys.each do |k|
+        distances[k] = 2**32
+        prev[k] = nil
+      end
+      distances[start_node] = 0
 
+      while !unvisited.empty?
+        current = unvisited.min_by { |n| distances[n] }
+        neighbours[current].each do |n|
+          alt =  distances[current] + 1
+          if alt < distances[n]
+            distances[n] = alt
+            prev[n] = current
+          end
+        end
+        unvisited = unvisited - [current]
+      end
+      [distances, prev]
+    end
+
+    def part2(input)
       pairs = parse_pairs(input)
       neighbours = build_neighbours(pairs)
       start = neighbours['YOU'].first
       goal = neighbours['SAN'].first
-      pp neighbours, start, goal
+
+      distances, predecessors = dijkstra(neighbours, start)
+      distances[goal]
     end
   end
 end

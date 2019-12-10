@@ -76,7 +76,21 @@ I)SAN
   end
 
   it "solves part2" do
-    skip
-    expect(day.part2('some_input')).to eq(nil)
+    input = <<~BEGI
+        COM)B
+        B)C
+        C)D
+        D)E
+        E)F
+        B)G
+        G)H
+        D)I
+        E)J
+        J)K
+        K)L
+        K)YOU
+        I)SAN
+    BEGI
+    expect(day.part2(input)).to eq(4)
   end
 end

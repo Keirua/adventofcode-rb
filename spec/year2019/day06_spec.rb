@@ -49,7 +49,34 @@ K)L
     expect(day.part1(input)).to eq(42)
   end
 
+  it "finds neighbours" do
+    input = <<-BEGI
+COM)B
+B)C
+C)D
+D)E
+E)F
+B)G
+G)H
+D)I
+E)J
+J)K
+K)L
+K)YOU
+I)SAN
+    BEGI
+
+    pairs = day.parse_pairs(input)
+    neighbours = day.build_neighbours(pairs)
+    expect(neighbours['YOU']).to eq(['K'])
+    expect(neighbours['SAN']).to eq(['I'])
+    expect(neighbours['COM']).to eq(['B'])
+    expect(neighbours['B'].sort).to eq(['COM', 'C', 'G'].sort)
+
+  end
+
   it "solves part2" do
+    skip
     expect(day.part2('some_input')).to eq(nil)
   end
 end

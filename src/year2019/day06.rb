@@ -21,15 +21,45 @@ module Year2019
       parents.keys.sum do |k|
         find_nb_orbits(parents, k)
       end
-      # parents.keys.inject(0) do |k, nb|
-      #   nb + find_nb_orbits(parents, k)
-      # end
-      # puts find_nb_orbits(parents, 'L')
-      # puts find_nb_orbits(parents, 'D')
+    end
+
+    def build_neighbours(pairs)
+      neighbours = {}
+      pairs.each do |a, b|
+        neighbours[a] = []
+        neighbours[b] = []
+      end
+
+      pairs.each do |a, b|
+        neighbours[a] << b
+        neighbours[b] << a
+      end
+
+      neighbours
     end
 
     def part2(input)
-      nil
+      input = <<-BEGI
+COM)B
+B)C
+C)D
+D)E
+E)F
+B)G
+G)H
+D)I
+E)J
+J)K
+K)L
+K)YOU
+I)SAN
+      BEGI
+
+      pairs = parse_pairs(input)
+      neighbours = build_neighbours(pairs)
+      start = neighbours['YOU'].first
+      goal = neighbours['SAN'].first
+      pp neighbours, start, goal
     end
   end
 end

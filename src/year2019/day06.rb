@@ -39,17 +39,17 @@ module Year2019
     end
 
     # https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm#Using_a_priority_queue
-    def dijkstra(neighbours, start_node);
+    def dijkstra(neighbours, start_node)
       unvisited = neighbours.keys
       distances = {}
       prev = {}
       neighbours.keys.each do |k|
-        distances[k] = 2**32
+        distances[k] = 2**32 # arbitrary large number
         prev[k] = nil
       end
       distances[start_node] = 0
 
-      while !unvisited.empty?
+      until unvisited.empty?
         current = unvisited.min_by { |n| distances[n] }
         neighbours[current].each do |n|
           alt =  distances[current] + 1
@@ -58,7 +58,7 @@ module Year2019
             prev[n] = current
           end
         end
-        unvisited = unvisited - [current]
+        unvisited -= [current]
       end
       [distances, prev]
     end
@@ -69,7 +69,7 @@ module Year2019
       start = neighbours['YOU'].first
       goal = neighbours['SAN'].first
 
-      distances, predecessors = dijkstra(neighbours, start)
+      distances, _predecessors = dijkstra(neighbours, start)
       distances[goal]
     end
   end
